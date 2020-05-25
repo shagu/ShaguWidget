@@ -30,10 +30,10 @@ local function PrepareLine(self, index)
   return self.lines[index]
 end
 
-local function UpdateContent(self, config)
+local function UpdateContent(self)
   local i = 0
   local width, height = 0, 0
-  for line in gfind(self.config..'\n', '(.-)\r?\n') do
+  for line in gfind(ShaguWidget_config[self.id]..'\n', '(.-)\r?\n') do
     i = i + 1
 
     local row = PrepareLine(self, i)
@@ -81,7 +81,6 @@ end
 
 local function CreateWidget(self, id, config)
   local widget = CreateFrame("Button", "ShaguWidget" .. id, WorldFrame)
-  widget.config = config
   widget.lines = {}
   widget.id = id
 
