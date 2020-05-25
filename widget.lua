@@ -59,11 +59,17 @@ local function UpdateContent(self, config)
     EnableErrors()
 
     row:SetText(line)
+
+    width = max(row:GetWidth(), width)
+    height = row:GetHeight() + height
   end
 
   for j=i+1, table.getn(self.lines) do
     self.lines[j]:Hide()
   end
+
+  self:SetWidth(width)
+  self:SetHeight(height)
 end
 
 local function CreateWidget(self, id, config)
