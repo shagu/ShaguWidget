@@ -9,15 +9,15 @@ editor:SetAutoFocus(false)
 editor:Hide()
 
 editor:SetScript("OnTextChanged", function()
-  this.config = this:GetText()
+  ShaguWidget_config[this.id] = this:GetText()
 end)
 editor:SetScript("OnEscapePressed", function()
   this:Hide()
 end)
 
 local function SetConfig(self)
-  editor.config = ShaguWidget_config[self.id]
-  editor:SetText(editor.config)
+  editor.id = self.id
+  editor:SetText(ShaguWidget_config[self.id])
   editor:Show()
 end
 
