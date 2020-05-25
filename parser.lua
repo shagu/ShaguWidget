@@ -73,6 +73,9 @@ local ParseConfig = function(input)
     local memkb, gckb = gcinfo()
     local memmb = memkb and memkb > 0 and round((memkb or 0)/1000, 2) .. " MB" or UNAVAILABLE
     return memmb
+  elseif string.find(input, "{memkb}") then
+    local memkb, gckb = gcinfo()
+    return memkb
   elseif string.find(input, "{serverh}") then
     local h, _ = GetGameTime()
     return h
