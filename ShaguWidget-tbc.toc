@@ -1,0 +1,11 @@
+## Interface: 20400
+## Title: |cff33ffccShagu|cffffffffWidget
+## Author: Shagu
+## Notes: Movable Information Widget
+## Version: 1.0
+## SavedVariables: ShaguWidget_config
+core.lua
+config.lua
+parser.lua
+widget.lua
+editor.lua
