@@ -68,8 +68,15 @@ local function UpdateContent(self, config)
     self.lines[j]:Hide()
   end
 
-  self:SetWidth(width)
-  self:SetHeight(height)
+  if width ~= self.width then
+    self.width = width
+    self:SetWidth(width)
+  end
+
+  if height ~= self.height then
+    self.height = height
+    self:SetHeight(height)
+  end
 end
 
 local function CreateWidget(self, id, config)
