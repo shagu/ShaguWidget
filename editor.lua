@@ -434,7 +434,6 @@ end)
 
 editor:SetScript("OnHide", function()
   ShaguWidget.unlock = nil
-  ShaguWidget.edit = nil
 end)
 
 editor.LoadConfig = function(self, name)
@@ -450,8 +449,10 @@ editor.LoadConfig = function(self, name)
     self.visible:SetChecked(0)
   end
 
-  -- set editing mode
-  ShaguWidget.edit = name
+  -- flash the current widget
+  if ShaguWidget.frames[name] then
+    ShaguWidget.frames[name].alpha = 1
+  end
 
   -- update dropdown menu
   self.input:SetSelectionByText(name)

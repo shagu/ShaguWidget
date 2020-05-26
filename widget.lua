@@ -56,11 +56,23 @@ local function UpdateContent(self)
     self.mouse = nil
   end
 
-  -- update highlight
-  if (ShaguWidget.unlock and MouseIsOver(self)) or (ShaguWidget.edit and ShaguWidget.edit == self.id) then
+  -- enable highlight on mouseover
+  if ShaguWidget.unlock and MouseIsOver(self) then
     self.highlight:Show()
-  else
-    self.highlight:Hide()
+    self.highlight:SetAlpha(1)
+    self.alpha = 1
+  end
+
+  -- continous background fadeout
+  if self.alpha and self.alpha >= 0 then
+    if self.alpha <= 0 then
+      self.highlight:Hide()
+    else
+      self.highlight:Show()
+    end
+
+    self.alpha = self.alpha - .05
+    self.highlight:SetAlpha(self.alpha)
   end
 
   for line in gfind(ShaguWidget_config[self.id]..'\n', '(.-)\r?\n') do
@@ -118,7 +130,7 @@ local function CreateWidget(self, id, config)
 
   widget.highlight = widget:CreateTexture(nil, "BACKGROUND")
   widget.highlight:SetTexture(0,0,0,.5)
-  widget.highlight:Hide()
+  widget.highlight:SetAlpha(0)
   SetAllPointsOffset(widget.highlight, widget, -5, -5)
 
   widget:SetScript("OnClick", ShaguWidget.ShowEditor)
