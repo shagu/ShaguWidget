@@ -24,6 +24,13 @@ local ParseConfig = function(input)
     else
       return UnitName("player") or ""
     end
+  elseif string.find(input, "{level") then
+    local _, _, format = string.find(input, "{level (.-)}")
+    if format then
+      return UnitLevel(format) or ""
+    else
+      return UnitLevel("player") or ""
+    end
   elseif string.find(input, "{health") then
     local _, _, format = string.find(input, "{health (.-)}")
     if format then

@@ -14,6 +14,8 @@
 
 * **{name UNIT}** - Displays the name of the given unit. Defaults to own character name. For details, see [WoWWiki](https://wowwiki.fandom.com/wiki/UnitId))
 
+* **{level UNIT}** - Displays the level of the given unit. Defaults to own character level. For details, see [WoWWiki](https://wowwiki.fandom.com/wiki/UnitId))
+
 * **{health UNIT}** - Displays the health of the given unit. Defaults to own character health. For details, see [WoWWiki](https://wowwiki.fandom.com/wiki/UnitId))
 
 * **{maxhealth UNIT}** - Displays the maximum health of the given unit. Defaults to own character max health. For details, see [WoWWiki](https://wowwiki.fandom.com/wiki/UnitId))
