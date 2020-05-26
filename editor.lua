@@ -428,6 +428,14 @@ editor:SetPoint("CENTER", 0, 0)
 editor:SetWidth(580)
 editor:SetHeight(420)
 
+editor:SetScript("OnShow", function()
+  ShaguWidget.unlock = true
+end)
+
+editor:SetScript("OnHide", function()
+  ShaguWidget.unlock = nil
+end)
+
 MakeMovable(editor)
 CreateBackdrop(editor)
 
@@ -597,6 +605,7 @@ do -- dropdown: select
         table.insert(menu, {
           text = name,
           func = function()
+            -- set window text
             editor.scroll.text:SetText(config)
 
             -- set visibility
@@ -652,10 +661,8 @@ do -- character visible
   editor.visible_font:SetText(DISPLAY .. " on " .. UnitName("player"))
 end
 
-local function SetConfig(self)
+-- add to core
+ShaguWidget.ShowEditor = function(self, id)
   editor.input:SetSelectionByText(self.id)
   editor:Show()
 end
-
--- add to core
-ShaguWidget.ShowEditor = SetConfig

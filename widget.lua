@@ -41,6 +41,16 @@ local function UpdateContent(self)
     return
   end
 
+  -- only enable dragging during edit mode
+  if ShaguWidget.unlock and not self.mouse then
+    self:EnableMouse(1)
+    self.mouse = true
+  elseif not ShaguWidget.unlock and self.mouse then
+    self:StopMovingOrSizing()
+    self:EnableMouse(0)
+    self.mouse = nil
+  end
+
   for line in gfind(ShaguWidget_config[self.id]..'\n', '(.-)\r?\n') do
     i = i + 1
 
@@ -89,6 +99,7 @@ end
 
 local function CreateWidget(self, id, config)
   local widget = CreateFrame("Button", "ShaguWidget" .. id, WorldFrame)
+  widget.mouse = 1
   widget.lines = {}
   widget.id = id
 
