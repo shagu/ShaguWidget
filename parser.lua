@@ -87,10 +87,10 @@ local ParseConfig = function(input)
     return memkb
   elseif string.find(input, "{serverh}") then
     local h, _ = GetGameTime()
-    return h
+    return string.format("%.2d", h)
   elseif string.find(input, "{serverm}") then
     local _, m = GetGameTime()
-    return m
+    return string.format("%.2d", m)
   elseif string.find(input, "{color") then
     local _, _, color = string.find(input, "{color (.-)}")
     if color then
