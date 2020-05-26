@@ -462,6 +462,7 @@ do -- Edit Box
     this:GetParent():UpdateScrollChildRect()
     this:GetParent():UpdateScrollState()
     local id, text = editor.input:GetSelection()
+    if not ShaguWidget_config[text] then return end
     ShaguWidget_config[text] = this:GetText()
   end)
 
@@ -617,8 +618,6 @@ do -- dropdown: select
     return menu
   end)
 end
-
-
 
 local function SetConfig(self)
   editor.input:SetSelectionByText(self.id)
