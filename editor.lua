@@ -25,6 +25,10 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
       else
         this.parent:HideMenu()
       end
+
+      if self.menu[id].func then
+        self.menu[id].func()
+      end
     end
 
     local function ListEntryOnEnter()
@@ -62,10 +66,6 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
         if id and self.menu and self.menu[id] then
           self.text:SetText(self.menu[id].text)
           self.id = id
-
-          if self.menu[id].func then
-            self.menu[id].func()
-          end
         end
       end,
       ["SetSelectionByText"] = function(self, name)
