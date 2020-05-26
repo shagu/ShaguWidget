@@ -90,6 +90,16 @@ local function UpdateContent(self)
       row.size = size
     end
 
+    -- update font family
+    local _, _, font = string.find(line, "{font (.-)}")
+    line = string.gsub(line, "{font (.-)}", "")
+    font = font and ShaguWidget.path .. "\\fonts\\" .. font .. ".ttf" or STANDARD_TEXT_FONT
+
+    if font and font ~= row.font then
+      row.update = true
+      row.font = font
+    end
+
     -- set font updates
     if row.update then
       row:SetFont(row.font, row.size)
