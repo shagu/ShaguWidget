@@ -1,16 +1,30 @@
 ShaguWidget = CreateFrame("Frame", "ShaguWidget", WorldFrame)
 ShaguWidget:RegisterEvent("ADDON_LOADED")
 ShaguWidget:SetScript("OnEvent", function()
-  if arg1 ~= "ShaguWidget" and arg1 ~= "ShaguWidget-tbc" then return end
+  if strfind(arg1, "ShaguWidget") then
+    -- load default config
+    if not ShaguWidget_config then
+      ShaguWidget_config = ShaguWidget.defconfig
+    end
 
-  if not ShaguWidget_config then
-    ShaguWidget_config = ShaguWidget.defconfig
-  end
-
-  for id, config in pairs(ShaguWidget_config) do
-    ShaguWidget.frames[id] = ShaguWidget:CreateWidget(id, config)
+    -- create all widgets
+    for id, config in pairs(ShaguWidget_config) do
+      ShaguWidget.frames[id] = ShaguWidget:CreateWidget(id, config)
+    end
   end
 end)
+
+-- detect current addon path
+local tocs = { "", "-master", "-tbc", "-wotlk" }
+for _, name in pairs(tocs) do
+  local current = string.format("ShaguWidget%s", name)
+  local _, title = GetAddOnInfo(current)
+  if title then
+    ShaguWidget.name = current
+    ShaguWidget.path = "Interface\\AddOns\\" .. current
+    break
+  end
+end
 
 ShaguWidget.frames = {}
 ShaguWidget.backdrop = {
@@ -34,6 +48,6 @@ end
 
 ShaguWidget.CreateBackdrop = function(self, frame)
   frame:SetBackdrop(self.backdrop)
-  frame:SetBackdropColor(.1,.1,.1,.8)
+  frame:SetBackdropColor(0,0,0,.8)
   frame:SetBackdropBorderColor(.2,.2,.2,1)
 end
