@@ -26,8 +26,8 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
         this.parent:HideMenu()
       end
 
-      if self.menu[id].func then
-        self.menu[id].func()
+      if this.parent.menu[this.id].func then
+        this.parent.menu[this.id].func()
       end
     end
 
@@ -443,6 +443,36 @@ editor:SetScript("OnHide", function()
   end
 end)
 
+editor.LoadConfig = function(self, name)
+  local config = ShaguWidget_config[name]
+
+  -- set window text
+  self.scroll.text:SetText(config)
+
+  -- set visibility
+  if ShaguWidget_visible[name] then
+    self.visible:SetChecked(1)
+  else
+    self.visible:SetChecked(0)
+  end
+
+  -- highlight current frame
+  for id, frame in pairs(ShaguWidget.frames) do
+    if id == name then
+      frame.highlight = frame.highlight or frame:CreateTexture(nil, "BACKGROUND")
+      frame.highlight:SetTexture(0,0,0,.5)
+      SetAllPointsOffset(frame.highlight, frame, -5, -5)
+
+      frame.highlight:Show()
+    elseif frame.highlight then
+      frame.highlight:Hide()
+    end
+  end
+
+  -- update dropdown menu
+  self.input:SetSelectionByText(name)
+end
+
 MakeMovable(editor)
 CreateBackdrop(editor)
 
@@ -562,7 +592,7 @@ do -- button: add
         local text = editBox:GetText()
         ShaguWidget_config[text] = [[New Widget]]
         ShaguWidget:ReloadWidgets()
-        editor.input:SetSelectionByText(text)
+        editor:LoadConfig(text)
         this:GetParent():Hide()
       end
     end
@@ -590,7 +620,7 @@ do -- button: delete
 
       -- set to first entry after deletion
       for name in pairs(ShaguWidget_config) do
-        editor.input:SetSelectionByText(name)
+        editor:LoadConfig(name)
         break
       end
     end
@@ -612,28 +642,7 @@ do -- dropdown: select
         table.insert(menu, {
           text = name,
           func = function()
-            -- set window text
-            editor.scroll.text:SetText(config)
-
-            -- set visibility
-            if ShaguWidget_visible[name] then
-              editor.visible:SetChecked(1)
-            else
-              editor.visible:SetChecked(0)
-            end
-
-            -- highlight current frame
-            for id, frame in pairs(ShaguWidget.frames) do
-              if id == name then
-                frame.highlight = frame.highlight or frame:CreateTexture(nil, "BACKGROUND")
-                frame.highlight:SetTexture(0,0,0,.5)
-                SetAllPointsOffset(frame.highlight, frame, -5, -5)
-
-                frame.highlight:Show()
-              elseif frame.highlight then
-                frame.highlight:Hide()
-              end
-            end
+            editor:LoadConfig(name)
           end
         })
       end
@@ -680,6 +689,6 @@ ShaguWidget.ShowEditor = function(self, id)
     end
   end
 
-  editor.input:SetSelectionByText(config)
+  editor:LoadConfig(config)
   editor:Show()
 end
