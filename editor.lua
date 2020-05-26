@@ -670,6 +670,16 @@ end
 
 -- add to core
 ShaguWidget.ShowEditor = function(self, id)
-  editor.input:SetSelectionByText(self.id)
+  local config = self.id
+
+  -- use first config on invalid id
+  if not ShaguWidget_config[self.id] then
+    for id in pairs(ShaguWidget_config) do
+      config = id
+      break
+    end
+  end
+
+  editor.input:SetSelectionByText(config)
   editor:Show()
 end
