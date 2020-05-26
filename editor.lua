@@ -463,8 +463,8 @@ do -- Edit Box
   editor.scroll.text:SetScript("OnTextChanged", function()
     this:GetParent():UpdateScrollChildRect()
     this:GetParent():UpdateScrollState()
-
-    ShaguWidget_config[editor.id] = this:GetText()
+    local id, text = editor.input:GetSelection()
+    ShaguWidget_config[text] = this:GetText()
   end)
 
   editor.scroll:SetScrollChild(editor.scroll.text)
@@ -486,9 +486,131 @@ do -- button: close
   SkinButton(editor.close, 1, .5, .5)
 end
 
+StaticPopupDialogs["SHAGUWIDGET_NEW"] = {
+  text = "Please enter the name for the new widget:",
+  button1 = OKAY,
+  button2 = CANCEL,
+  timeout = 0,
+  whileDead = 1,
+  hideOnEscape = 1,
+  hasEditBox = 1,
+  maxLetters = 16,
+  OnShow = function()
+    getglobal(this:GetName().."Button1"):Disable()
+    getglobal(this:GetName().."EditBox"):SetFocus()
+  end,
+  EditBoxOnTextChanged = function ()
+    local editBox = getglobal(this:GetParent():GetName().."EditBox")
+    if string.len(editBox:GetText()) > 0 then
+      getglobal(this:GetParent():GetName().."Button1"):Enable()
+    else
+      getglobal(this:GetParent():GetName().."Button1"):Disable()
+    end
+  end,
+  EditBoxOnEscapePressed = function()
+    this:GetParent():Hide()
+  end
+}
+
+StaticPopupDialogs["SHAGUWIDGET_DELETE"] = {
+  button1 = YES,
+  button2 = NO,
+  timeout = 0,
+  whileDead = 1,
+  hideOnEscape = 1,
+}
+
+do -- button: add
+  editor.add = CreateFrame("Button", nil, editor, "UIPanelButtonTemplate")
+  SkinButton(editor.add)
+  editor.add:SetWidth(22)
+  editor.add:SetHeight(22)
+  editor.add:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -10)
+  editor.add:GetFontString():SetPoint("CENTER", 1, 0)
+  editor.add:SetText("+")
+  editor.add:SetTextColor(.5,1,.5,1)
+  editor.add:SetScript("OnClick", function()
+    local dialog = StaticPopupDialogs["SHAGUWIDGET_NEW"]
+    dialog.OnAccept = function()
+      if ( getglobal(this:GetParent():GetName().."Button1"):IsEnabled() == 1 ) then
+        local editBox = getglobal(this:GetParent():GetName().."EditBox")
+        local text = editBox:GetText()
+        ShaguWidget_config[text] = [[New Widget]]
+        ShaguWidget:ReloadWidgets()
+        editor.input:SetSelectionByText(text)
+      end
+    end
+    dialog.EditBoxOnEnterPressed = dialog.OnAccept
+    StaticPopup_Show("SHAGUWIDGET_NEW")
+  end)
+end
+
+do -- button: delete
+  editor.del = CreateFrame("Button", nil, editor, "UIPanelButtonTemplate")
+  SkinButton(editor.del)
+  editor.del:SetWidth(22)
+  editor.del:SetHeight(22)
+  editor.del:SetPoint("LEFT", editor.add, "RIGHT", 5, 0)
+  editor.del:GetFontString():SetPoint("CENTER", 1, 0)
+  editor.del:SetText("-")
+  editor.del:SetTextColor(1,.5,.5,1)
+  editor.del:SetScript("OnClick", function()
+    local id, text = editor.input:GetSelection()
+    local dialog = StaticPopupDialogs["SHAGUWIDGET_DELETE"]
+    dialog.text = "Do you really want to delete |cff33ffcc" .. text .. "|r?"
+    dialog.OnAccept = function()
+      ShaguWidget_config[text] = nil
+      ShaguWidget:ReloadWidgets()
+
+      -- set to first entry after deletion
+      for name in pairs(ShaguWidget_config) do
+        editor.input:SetSelectionByText(name)
+        break
+      end
+    end
+
+    StaticPopup_Show("SHAGUWIDGET_DELETE")
+  end)
+end
+
+do -- dropdown: select
+  editor.input = CreateDropDownButton(nil, editor)
+  --editor.input:SetBackdrop(nil)
+  editor.input.menuframe:SetParent(editor)
+  editor.input:SetPoint("LEFT", editor.del, "RIGHT", 5, 0)
+  editor.input:SetWidth(160)
+  editor.input:SetHeight(22)
+  editor.input:SetMenu(function()
+    local menu = {}
+    if ShaguWidget_config then
+      for name, config in pairs(ShaguWidget_config) do
+        table.insert(menu, {
+          text = name,
+          func = function()
+            editor.scroll.text:SetText(config)
+
+            -- highlight current frame
+            for id, frame in pairs(ShaguWidget.frames) do
+              if id == name then
+                frame.highlight = frame.highlight or frame:CreateTexture(nil, "BACKGROUND")
+                frame.highlight:SetTexture(0,0,0,.5)
+                SetAllPointsOffset(frame.highlight, frame, -5, -5)
+
+                frame.highlight:Show()
+              elseif frame.highlight then
+                frame.highlight:Hide()
+              end
+            end
+          end
+        })
+      end
+    end
+    return menu
+  end)
+end
+
 local function SetConfig(self)
-  editor.id = self.id
-  editor.scroll.text:SetText(ShaguWidget_config[self.id])
+  editor.input:SetSelectionByText(self.id)
   editor:Show()
 end
 
