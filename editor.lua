@@ -538,6 +538,7 @@ do -- button: add
         ShaguWidget_config[text] = [[New Widget]]
         ShaguWidget:ReloadWidgets()
         editor.input:SetSelectionByText(text)
+        this:GetParent():Hide()
       end
     end
     dialog.EditBoxOnEnterPressed = dialog.OnAccept
