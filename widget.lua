@@ -2,6 +2,11 @@ local gfind = string.gmatch or string.gfind
 local nilerror, olderror = function() return end
 local MakeMovable = ShaguWidget.MakeMovable
 
+local function SetAllPointsOffset(frame, parent, offset)
+  frame:SetPoint("TOPLEFT", parent, "TOPLEFT", offset, -offset)
+  frame:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT", -offset, offset)
+end
+
 local function DisableErrors()
   olderror = olderror or geterrorhandler()
   seterrorhandler(nilerror)
@@ -49,6 +54,13 @@ local function UpdateContent(self)
     self:StopMovingOrSizing()
     self:EnableMouse(0)
     self.mouse = nil
+  end
+
+  -- update highlight
+  if (ShaguWidget.unlock and MouseIsOver(self)) or (ShaguWidget.edit and ShaguWidget.edit == self.id) then
+    self.highlight:Show()
+  else
+    self.highlight:Hide()
   end
 
   for line in gfind(ShaguWidget_config[self.id]..'\n', '(.-)\r?\n') do
@@ -99,9 +111,15 @@ end
 
 local function CreateWidget(self, id, config)
   local widget = CreateFrame("Button", "ShaguWidget" .. id, WorldFrame)
+  widget.alpha = 0
   widget.mouse = 1
   widget.lines = {}
   widget.id = id
+
+  widget.highlight = widget:CreateTexture(nil, "BACKGROUND")
+  widget.highlight:SetTexture(0,0,0,.5)
+  widget.highlight:Hide()
+  SetAllPointsOffset(widget.highlight, widget, -5, -5)
 
   widget:SetScript("OnClick", ShaguWidget.ShowEditor)
   widget:SetScript("OnUpdate", UpdateContent)

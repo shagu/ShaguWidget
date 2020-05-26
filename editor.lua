@@ -434,6 +434,7 @@ end)
 
 editor:SetScript("OnHide", function()
   ShaguWidget.unlock = nil
+  ShaguWidget.edit = nil
 
   -- clean up all highlights
   for id, frame in pairs(ShaguWidget.frames) do
@@ -456,18 +457,8 @@ editor.LoadConfig = function(self, name)
     self.visible:SetChecked(0)
   end
 
-  -- highlight current frame
-  for id, frame in pairs(ShaguWidget.frames) do
-    if id == name then
-      frame.highlight = frame.highlight or frame:CreateTexture(nil, "BACKGROUND")
-      frame.highlight:SetTexture(0,0,0,.5)
-      SetAllPointsOffset(frame.highlight, frame, -5, -5)
-
-      frame.highlight:Show()
-    elseif frame.highlight then
-      frame.highlight:Hide()
-    end
-  end
+  -- set editing mode
+  ShaguWidget.edit = name
 
   -- update dropdown menu
   self.input:SetSelectionByText(name)
