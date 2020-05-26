@@ -55,3 +55,9 @@ ShaguWidget.CreateBackdrop = function(frame)
   frame:SetBackdropColor(0,0,0,.8)
   frame:SetBackdropBorderColor(.2,.2,.2,1)
 end
+
+-- add slashcmd
+SLASH_SHAGUWIDGET1, SLASH_SHAGUWIDGET2, SLASH_SHAGUWIDGET3 = '/shaguwidget', '/swidget', '/widget'
+function SlashCmdList.SHAGUWIDGET(msg, editbox)
+  ShaguWidget:ShowEditor()
+end
