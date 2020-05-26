@@ -8,9 +8,7 @@ ShaguWidget:SetScript("OnEvent", function()
     end
 
     -- create all widgets
-    for id, config in pairs(ShaguWidget_config) do
-      ShaguWidget.frames[id] = ShaguWidget:CreateWidget(id, config)
-    end
+    this:ReloadWidgets()
   end
 end)
 
@@ -32,6 +30,12 @@ ShaguWidget.backdrop = {
   edgeFile = "Interface\\BUTTONS\\WHITE8X8", edgeSize = 1,
   insets = {left = -1, right = -1, top = -1, bottom = -1},
 }
+
+ShaguWidget.ReloadWidgets = function(self)
+  for id, config in pairs(ShaguWidget_config) do
+    ShaguWidget.frames[id] = ShaguWidget.frames[id] or ShaguWidget:CreateWidget(id, config)
+  end
+end
 
 ShaguWidget.MakeMovable = function(frame)
   frame:EnableMouse(true)
