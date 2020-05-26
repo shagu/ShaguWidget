@@ -1,5 +1,4 @@
 # ShaguWidget
-
 **not ready yet.**
 
 ## Commands
@@ -10,13 +9,16 @@ To start the editor/unlock mode:
 * /swidget
 * /widget
 
-## Preview Video
-[![youtube-video](https://img.youtube.com/vi/6xT7l5_q-fY/0.jpg)](https://www.youtube.com/watch?v=6xT7l5_q-fY)
+## Preview
+![screenshot](screenshot.jpg)
+YouTube Video on the initial prototype: [HERE](https://www.youtube.com/watch?v=6xT7l5_q-fY)
 
 ## Variables
 * **{color COLOR}** - Set the color to following characters to the given hex color (RRGGBB) such as: "33ffcc". If empty, the color will be reset to game defaults.
 
 * **{size SIZE}** - Set the font size of the entire line to a specific size. Defaults to 12.
+
+* **{font FONT}** - Set the font family of the entire line to a specific font. Defaults to default game font. For details, see the font section below.
 
 * **{date FORMAT}** - Displays the given date format. Defaults to "%M/%D/%Y %H:%M:%S". For details, see: [Lua docs](https://www.lua.org/pil/22.1.html)
 
@@ -53,3 +55,27 @@ To start the editor/unlock mode:
 * **{serverh}** - Displays the servertime clock (hour).
 
 * **{serverm}** - Displays the servertime clock (minutes)
+
+## Fonts
+### Builtin Fonts
+ShaguWidget already includes 14 fonts taken from the [google font project](https://fonts.google.com/):
+
+  * `{font BalooBhaina}` *(website: [BalooBhaina](https://fonts.google.com/specimen/Baloo+Bhaina))*
+  * `{font Bungee}` *(website: [Bungee](https://fonts.google.com/specimen/Bungee))*
+  * `{font CaesarDressing}` *(website: [CaesarDressing](https://fonts.google.com/specimen/Caesar+Dressing))*
+  * `{font CoveredByYourGrace}` *(website: [CoveredByYourGrace](https://fonts.google.com/specimen/Covered+By+Your+Grace))*
+  * `{font JotiOne}` *(website: [JotiOne](https://fonts.google.com/specimen/Joti+One))*
+  * `{font LodrinaSolid}` *(website: [LodrinaSolid](https://fonts.google.com/specimen/Londrina+Solid))*
+  * `{font NovaFlat}` *(website: [NovaFlat](https://fonts.google.com/specimen/Nova+Flat))*
+  * `{font Roboto}` *(website: [Roboto](https://fonts.google.com/specimen/Roboto))*
+  * `{font RobotoMono}` *(website: [RobotoMono](https://fonts.google.com/specimen/Roboto))*
+  * `{font SedgwickAveDisplay}` *(website: [SedgwickAveDisplay](https://fonts.google.com/specimen/Sedgwick+Ave+Display))*
+  * `{font Share}` *(website: [Share](https://fonts.google.com/specimen/Share))*
+  * `{font ShareBold}` *(website: [ShareBold](https://fonts.google.com/specimen/Share))*
+  * `{font Sniglet}` *(website: [Sniglet](https://fonts.google.com/specimen/Sniglet))*
+  * `{font SquadaOne}` *(website: [SquadaOne](https://fonts.google.com/specimen/Squada+One))*
+
+![thumbnails](https://raw.githubusercontent.com/shagu/ShaguAddons/master/_img/pfUI-fonts/thumbnails.png)
+
+### Custom Fonts
+In order to use a custom font, make sure it's a TrueType (`.ttf`) font and copy it to the `Interface\AddOns\ShaguWidget[-tbc]\fonts` directory. It might be required to restart the game, before you can access it via the regular `{font YOURFONT}` variable.
