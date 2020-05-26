@@ -435,13 +435,6 @@ end)
 editor:SetScript("OnHide", function()
   ShaguWidget.unlock = nil
   ShaguWidget.edit = nil
-
-  -- clean up all highlights
-  for id, frame in pairs(ShaguWidget.frames) do
-    if frame.highlight then
-      frame.highlight:Hide()
-    end
-  end
 end)
 
 editor.LoadConfig = function(self, name)
