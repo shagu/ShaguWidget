@@ -40,6 +40,8 @@ YouTube Video on the initial prototype: [HERE](https://www.youtube.com/watch?v=6
 
 * **{copper}** - Displays the characters copper.
 
+* **{realm}** - Display the realm name.
+
 * **{fps}** - Displays the FPS.
 
 * **{ping}** - Displays the ping in milliseconds.

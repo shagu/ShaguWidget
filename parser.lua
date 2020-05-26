@@ -65,6 +65,8 @@ local ParseConfig = function(input)
     return floor(mod((GetMoney()/100),100))
   elseif string.find(input, "{copper}") then
     return floor(mod(GetMoney(),100))
+  elseif string.find(input, "{realm}") then
+    return GetRealmName()
   elseif string.find(input, "{fps}") then
     return ceil(GetFramerate())
   elseif string.find(input, "{ping}") then
