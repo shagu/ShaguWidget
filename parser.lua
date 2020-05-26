@@ -66,7 +66,7 @@ local ParseConfig = function(input)
   elseif string.find(input, "{copper}") then
     return floor(mod(GetMoney(),100))
   elseif string.find(input, "{fps}") then
-    return round(GetFramerate(),1)
+    return ceil(GetFramerate())
   elseif string.find(input, "{ping}") then
     local _, _, ping = GetNetStats()
     return ping
