@@ -434,6 +434,13 @@ end)
 
 editor:SetScript("OnHide", function()
   ShaguWidget.unlock = nil
+
+  -- clean up all highlights
+  for id, frame in pairs(ShaguWidget.frames) do
+    if frame.highlight then
+      frame.highlight:Hide()
+    end
+  end
 end)
 
 MakeMovable(editor)
