@@ -498,6 +498,7 @@ StaticPopupDialogs["SHAGUWIDGET_NEW"] = {
   OnShow = function()
     getglobal(this:GetName().."Button1"):Disable()
     getglobal(this:GetName().."EditBox"):SetFocus()
+    getglobal(this:GetName().."EditBox"):SetText("")
   end,
   EditBoxOnTextChanged = function ()
     local editBox = getglobal(this:GetParent():GetName().."EditBox")
