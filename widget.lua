@@ -34,6 +34,13 @@ end
 local function UpdateContent(self)
   local i = 0
   local width, height = 0, 0
+
+  -- check if widget was deleted
+  if not ShaguWidget_config[self.id] then
+    self:Hide()
+    return
+  end
+
   for line in gfind(ShaguWidget_config[self.id]..'\n', '(.-)\r?\n') do
     i = i + 1
 
