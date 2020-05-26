@@ -7,6 +7,11 @@ ShaguWidget:SetScript("OnEvent", function()
       ShaguWidget_config = ShaguWidget.defconfig
     end
 
+    -- create empty table for visibility
+    if not ShaguWidget_visible then
+      ShaguWidget_visible = { ["Default"] = true }
+    end
+
     -- create all widgets
     this:ReloadWidgets()
   end
@@ -33,7 +38,13 @@ ShaguWidget.backdrop = {
 
 ShaguWidget.ReloadWidgets = function(self)
   for id, config in pairs(ShaguWidget_config) do
-    ShaguWidget.frames[id] = ShaguWidget.frames[id] or ShaguWidget:CreateWidget(id, config)
+    local visible = ShaguWidget_visible[id] and true or nil
+    if visible then
+      ShaguWidget.frames[id] = ShaguWidget.frames[id] or ShaguWidget:CreateWidget(id, config)
+      ShaguWidget.frames[id]:Show()
+    elseif ShaguWidget.frames[id] then
+      ShaguWidget.frames[id]:Hide()
+    end
   end
 end
 

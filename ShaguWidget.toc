@@ -4,6 +4,7 @@
 ## Notes: Movable Information Widget
 ## Version: 1.0
 ## SavedVariables: ShaguWidget_config
+## SavedVariablesPerCharacter: ShaguWidget_visible
 core.lua
 config.lua
 parser.lua
