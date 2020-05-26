@@ -599,6 +599,13 @@ do -- dropdown: select
           func = function()
             editor.scroll.text:SetText(config)
 
+            -- set visibility
+            if ShaguWidget_visible[name] then
+              editor.visible:SetChecked(1)
+            else
+              editor.visible:SetChecked(0)
+            end
+
             -- highlight current frame
             for id, frame in pairs(ShaguWidget.frames) do
               if id == name then
@@ -617,6 +624,32 @@ do -- dropdown: select
     end
     return menu
   end)
+end
+
+do -- character visible
+  editor.visible = CreateFrame("CheckButton", nil, editor, "UICheckButtonTemplate")
+  editor.visible:SetNormalTexture("")
+  editor.visible:SetPushedTexture("")
+  editor.visible:SetHighlightTexture("")
+  CreateBackdrop(editor.visible)
+  editor.visible:SetWidth(14)
+  editor.visible:SetHeight(14)
+  editor.visible:SetPoint("TOPRIGHT" , -10, -40)
+  editor.visible:SetScript("OnClick", function ()
+    local id, text = editor.input:GetSelection()
+    if text and this:GetChecked() then
+      ShaguWidget_visible[text] = true
+    elseif text then
+      ShaguWidget_visible[text] = nil
+    end
+
+    ShaguWidget:ReloadWidgets()
+  end)
+
+  editor.visible_font = editor:CreateFontString(nil, "OVERLAY", GameFontWhite)
+  editor.visible_font:SetFont(STANDARD_TEXT_FONT, 12)
+  editor.visible_font:SetPoint("RIGHT", editor.visible, "LEFT", -5, 0)
+  editor.visible_font:SetText(DISPLAY .. " on " .. UnitName("player"))
 end
 
 local function SetConfig(self)
