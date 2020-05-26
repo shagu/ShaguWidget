@@ -33,7 +33,7 @@ ShaguWidget.backdrop = {
   insets = {left = -1, right = -1, top = -1, bottom = -1},
 }
 
-ShaguWidget.MakeMovable = function(self, frame)
+ShaguWidget.MakeMovable = function(frame)
   frame:EnableMouse(true)
   frame:SetMovable(true)
   frame:RegisterForDrag("LeftButton")
@@ -46,8 +46,8 @@ ShaguWidget.MakeMovable = function(self, frame)
   end)
 end
 
-ShaguWidget.CreateBackdrop = function(self, frame)
-  frame:SetBackdrop(self.backdrop)
+ShaguWidget.CreateBackdrop = function(frame)
+  frame:SetBackdrop(ShaguWidget.backdrop)
   frame:SetBackdropColor(0,0,0,.8)
   frame:SetBackdropBorderColor(.2,.2,.2,1)
 end

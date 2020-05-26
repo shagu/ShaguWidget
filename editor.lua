@@ -1,6 +1,8 @@
 local SetHighlightEnter, SetHighlightLeave, SetHighlight
 local CreateScrollFrame, CreateScrollChild
 local SkinButton, CreateDropDownButton
+local MakeMovable = ShaguWidget.MakeMovable
+local CreateBackdrop = ShaguWidget.CreateBackdrop
 
 do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets.lua]
   do -- dropdown
@@ -349,7 +351,7 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
       local color = RAID_CLASS_COLORS[class]
       cr, cg, cb = color.r , color.g, color.b
     end
-    ShaguWidget:CreateBackdrop(b)
+    CreateBackdrop(b)
     b:SetNormalTexture("")
     b:SetHighlightTexture("")
     b:SetPushedTexture("")
@@ -397,14 +399,14 @@ editor:SetPoint("CENTER", 0, 0)
 editor:SetWidth(580)
 editor:SetHeight(420)
 
-ShaguWidget:MakeMovable(editor)
-ShaguWidget:CreateBackdrop(editor)
+MakeMovable(editor)
+CreateBackdrop(editor)
 
 table.insert(UISpecialFrames, "ShaguWidgetEditor")
 
 do -- Edit Box
   editor.scroll = CreateScrollFrame("ShaguWidgetEditorScroll", editor)
-  editor.scroll:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -30)
+  editor.scroll:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -50)
   editor.scroll:SetPoint("BOTTOMRIGHT", editor, "BOTTOMRIGHT", -10, 10)
   editor.scroll:SetWidth(560)
   editor.scroll:SetHeight(400)
@@ -413,7 +415,7 @@ do -- Edit Box
   editor.scroll.backdrop:SetFrameLevel(1)
   editor.scroll.backdrop:SetPoint("TOPLEFT", editor.scroll, "TOPLEFT", -5, 5)
   editor.scroll.backdrop:SetPoint("BOTTOMRIGHT", editor.scroll, "BOTTOMRIGHT", 5, -5)
-  ShaguWidget:CreateBackdrop(editor)
+  CreateBackdrop(editor)
 
   editor.scroll.text = CreateFrame("EditBox", "ShaguWidgetEditorScrollEditBox", editor.scroll)
   editor.scroll.text.bg = editor.scroll.text:CreateTexture(nil, "BACKGROUND")

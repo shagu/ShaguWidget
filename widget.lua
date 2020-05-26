@@ -1,5 +1,6 @@
 local gfind = string.gmatch or string.gfind
 local nilerror, olderror = function() return end
+local MakeMovable = ShaguWidget.MakeMovable
 
 local function DisableErrors()
   olderror = olderror or geterrorhandler()
@@ -90,7 +91,7 @@ local function CreateWidget(self, id, config)
   widget:SetWidth(200)
   widget:SetHeight(200)
 
-  ShaguWidget:MakeMovable(widget)
+  MakeMovable(widget)
 
   return widget
 end
