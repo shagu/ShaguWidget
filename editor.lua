@@ -1,6 +1,6 @@
-local SetHighlightEnter, SetHighlightLeave, SetHighlight
+local SetHighlightEnter, SetHighlightLeave, SetHighlight, SetAllPointsOffset
 local CreateScrollFrame, CreateScrollChild
-local SkinButton, CreateDropDownButton
+local SkinButton, CreateDropDownButton, SkinArrowButton
 local MakeMovable = ShaguWidget.MakeMovable
 local CreateBackdrop = ShaguWidget.CreateBackdrop
 
@@ -24,10 +24,6 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
         this.parent:ShowMenu()
       else
         this.parent:HideMenu()
-      end
-
-      if this.parent.menu[this.id].func then
-        this.parent.menu[this.id].func()
       end
     end
 
@@ -66,6 +62,10 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
         if id and self.menu and self.menu[id] then
           self.text:SetText(self.menu[id].text)
           self.id = id
+
+          if self.menu[id].func then
+            self.menu[id].func()
+          end
         end
       end,
       ["SetSelectionByText"] = function(self, name)
@@ -230,6 +230,11 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
     end
   end
 
+  function SetAllPointsOffset(frame, parent, offset)
+    frame:SetPoint("TOPLEFT", parent, "TOPLEFT", offset, -offset)
+    frame:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT", -offset, offset)
+  end
+
   function SetHighlightEnter()
     if this.funce then this:funce() end
     if this.locked then return end
@@ -390,6 +395,30 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
       end
       b.locked = false
     end
+  end
+
+  function SkinArrowButton(button, dir, size)
+    SkinButton(button)
+
+    button:SetHitRectInsets(-3,-3,-3,-3)
+
+    button:SetNormalTexture(nil)
+    button:SetPushedTexture(nil)
+    button:SetHighlightTexture(nil)
+    button:SetDisabledTexture(nil)
+
+    if size then
+      button:SetWidth(size)
+      button:SetHeight(size)
+    end
+
+    if not button.icon then
+      button.icon = button:CreateTexture(nil, "ARTWORK")
+      button.icon:SetAlpha(.8)
+      SetAllPointsOffset(button.icon, button, 3)
+    end
+
+    button.icon:SetTexture(ShaguWidget.path .. "\\img\\" .. dir)
   end
 end
 
