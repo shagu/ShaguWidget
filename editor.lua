@@ -435,7 +435,7 @@ table.insert(UISpecialFrames, "ShaguWidgetEditor")
 
 do -- Edit Box
   editor.scroll = CreateScrollFrame("ShaguWidgetEditorScroll", editor)
-  editor.scroll:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -50)
+  editor.scroll:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -65)
   editor.scroll:SetPoint("BOTTOMRIGHT", editor, "BOTTOMRIGHT", -10, 10)
   editor.scroll:SetWidth(560)
   editor.scroll:SetHeight(400)
@@ -444,12 +444,10 @@ do -- Edit Box
   editor.scroll.backdrop:SetFrameLevel(1)
   editor.scroll.backdrop:SetPoint("TOPLEFT", editor.scroll, "TOPLEFT", -5, 5)
   editor.scroll.backdrop:SetPoint("BOTTOMRIGHT", editor.scroll, "BOTTOMRIGHT", 5, -5)
-  CreateBackdrop(editor)
 
   editor.scroll.text = CreateFrame("EditBox", "ShaguWidgetEditorScrollEditBox", editor.scroll)
   editor.scroll.text.bg = editor.scroll.text:CreateTexture(nil, "BACKGROUND")
-  editor.scroll.text.bg:SetAllPoints(editor.scroll.text)
-  editor.scroll.text.bg:SetTexture(0,0,0,.5)
+  editor.scroll.text.bg:SetTexture(.2,.2,.2,.2)
   editor.scroll.text:SetMultiLine(true)
   editor.scroll.text:SetWidth(560)
   editor.scroll.text:SetHeight(400)
@@ -468,6 +466,9 @@ do -- Edit Box
   end)
 
   editor.scroll:SetScrollChild(editor.scroll.text)
+
+  SetAllPointsOffset(editor.scroll.text.bg, editor.scroll.text, 2)
+  CreateBackdrop(editor.scroll)
 end
 
 do -- button: close
@@ -521,14 +522,21 @@ StaticPopupDialogs["SHAGUWIDGET_DELETE"] = {
   hideOnEscape = 1,
 }
 
+do -- caption: title
+  editor.title = editor:CreateFontString(nil, "OVERLAY", GameFontWhite)
+  editor.title:SetPoint("TOP", editor, "TOP", 0, -10)
+  editor.title:SetFont(STANDARD_TEXT_FONT, 14)
+  editor.title:SetText("|cff33ffccShagu|cffffffffWidget")
+end
+
 do -- button: add
   editor.add = CreateFrame("Button", nil, editor, "UIPanelButtonTemplate")
   SkinButton(editor.add)
-  editor.add:SetWidth(22)
+  editor.add:SetWidth(75)
   editor.add:SetHeight(22)
-  editor.add:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -10)
+  editor.add:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -35)
   editor.add:GetFontString():SetPoint("CENTER", 1, 0)
-  editor.add:SetText("+")
+  editor.add:SetText("[ + ] |cffccffcc New")
   editor.add:SetTextColor(.5,1,.5,1)
   editor.add:SetScript("OnClick", function()
     local dialog = StaticPopupDialogs["SHAGUWIDGET_NEW"]
@@ -550,11 +558,11 @@ end
 do -- button: delete
   editor.del = CreateFrame("Button", nil, editor, "UIPanelButtonTemplate")
   SkinButton(editor.del)
-  editor.del:SetWidth(22)
+  editor.del:SetWidth(75)
   editor.del:SetHeight(22)
   editor.del:SetPoint("LEFT", editor.add, "RIGHT", 5, 0)
   editor.del:GetFontString():SetPoint("CENTER", 1, 0)
-  editor.del:SetText("-")
+  editor.del:SetText("[ x ] |cffffcccc Remove")
   editor.del:SetTextColor(1,.5,.5,1)
   editor.del:SetScript("OnClick", function()
     local id, text = editor.input:GetSelection()
@@ -577,10 +585,9 @@ end
 
 do -- dropdown: select
   editor.input = CreateDropDownButton(nil, editor)
-  --editor.input:SetBackdrop(nil)
   editor.input.menuframe:SetParent(editor)
   editor.input:SetPoint("LEFT", editor.del, "RIGHT", 5, 0)
-  editor.input:SetWidth(160)
+  editor.input:SetWidth(150)
   editor.input:SetHeight(22)
   editor.input:SetMenu(function()
     local menu = {}
@@ -610,6 +617,8 @@ do -- dropdown: select
     return menu
   end)
 end
+
+
 
 local function SetConfig(self)
   editor.input:SetSelectionByText(self.id)
