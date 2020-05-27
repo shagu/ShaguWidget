@@ -30,10 +30,12 @@ for _, name in pairs(tocs) do
 end
 
 ShaguWidget.frames = {}
+
 ShaguWidget.backdrop = {
-  bgFile = "Interface\\BUTTONS\\WHITE8X8", tile = false, tileSize = 0,
-  edgeFile = "Interface\\BUTTONS\\WHITE8X8", edgeSize = 1,
-  insets = {left = -1, right = -1, top = -1, bottom = -1},
+  bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+  edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+  tile = true, tileSize = 16, edgeSize = 16,
+  insets = { left = 4, right = 4, top = 4, bottom = 4 }
 }
 
 ShaguWidget.ReloadWidgets = function(self)
@@ -61,10 +63,16 @@ ShaguWidget.MakeMovable = function(frame)
   end)
 end
 
-ShaguWidget.CreateBackdrop = function(frame)
-  frame:SetBackdrop(ShaguWidget.backdrop)
-  frame:SetBackdropColor(0,0,0,.8)
-  frame:SetBackdropBorderColor(.2,.2,.2,1)
+if pfUI and pfUI.version and pfUI.api and pfUI.api.CreateBackdrop then
+  ShaguWidget.CreateBackdrop = function(frame)
+    pfUI.api.CreateBackdrop(frame, nil, true)
+  end
+else
+  ShaguWidget.CreateBackdrop = function(frame)
+    frame:SetBackdrop(ShaguWidget.backdrop)
+    frame:SetBackdropColor(0,0,0,.8)
+    frame:SetBackdropBorderColor(.2,.2,.2,1)
+  end
 end
 
 -- add slashcmd
