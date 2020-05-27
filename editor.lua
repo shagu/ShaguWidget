@@ -665,6 +665,7 @@ end
 
 -- add to core
 ShaguWidget.ShowEditor = function(self, id)
+  local self = self or this
   local config = self.id
 
   -- use first config on invalid id
