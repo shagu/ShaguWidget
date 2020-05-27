@@ -103,7 +103,7 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
       ["ShowMenu"] = function(self)
         self:UpdateMenu()
         self.menuframe:SetFrameLevel(self:GetFrameLevel() + 8)
-        self.menuframe:SetHeight(table.getn(self.menu)*20+4)
+        self.menuframe:SetHeight(table.getn(self.menu)*24+4)
         self.menuframe:Show()
       end,
       ["HideMenu"] = function(self)
@@ -150,15 +150,15 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
           frame = CreateFrame("Button", nil, self.menuframe)
           frame:SetFrameStrata("FULLSCREEN")
           frame:ClearAllPoints()
-          frame:SetPoint("TOPLEFT", self.menuframe, "TOPLEFT", 2, -(entry-1)*20-2)
-          frame:SetPoint("TOPRIGHT", self.menuframe, "TOPRIGHT", -2, -(entry-1)*20-2)
-          frame:SetHeight(20)
+          frame:SetPoint("TOPLEFT", self.menuframe, "TOPLEFT", 2, -(entry-1)*24-2)
+          frame:SetPoint("TOPRIGHT", self.menuframe, "TOPRIGHT", -2, -(entry-1)*24-2)
+          frame:SetHeight(24)
           frame.parent = self
 
           frame.icon = frame:CreateTexture(nil, "OVERLAY")
           frame.icon:SetPoint("RIGHT", frame, "RIGHT", -2, 0)
-          frame.icon:SetHeight(16)
-          frame.icon:SetWidth(16)
+          frame.icon:SetHeight(20)
+          frame.icon:SetWidth(20)
           frame.icon:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
 
           frame.text = frame:CreateFontString(nil, "OVERLAY")
@@ -170,6 +170,7 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
 
           frame.hover = frame:CreateTexture(nil, "BACKGROUND")
           frame.hover:SetAllPoints(frame)
+          SetAllPointsOffset(frame.hover, frame, 4)
           frame.hover:SetTexture(.4,.4,.4,.4)
           frame.hover:Hide()
 
@@ -191,15 +192,15 @@ do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets
       frame:SetScript("OnEnter", ListButtonOnEnter)
       frame:SetScript("OnLeave", ListButtonOnLeave)
       frame:SetScript("OnClick", ListButtonOnClick)
-      frame:SetHeight(20)
+      frame:SetHeight(24)
       frame.id = nil
 
       CreateBackdrop(frame, nil, true)
 
       local button = CreateFrame("Button", nil, frame)
       button:SetPoint("RIGHT", frame, "RIGHT", -2, 0)
-      button:SetWidth(16)
-      button:SetHeight(16)
+      button:SetWidth(22)
+      button:SetHeight(22)
       button:SetScript("OnClick", ListButtonOnClick)
       SkinArrowButton(button, "down")
       button.icon:SetVertexColor(1,.9,.1)
@@ -466,10 +467,10 @@ table.insert(UISpecialFrames, "ShaguWidgetEditor")
 
 do -- Edit Box
   editor.scroll = CreateScrollFrame("ShaguWidgetEditorScroll", editor)
-  editor.scroll:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -65)
+  editor.scroll:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -70)
   editor.scroll:SetPoint("BOTTOMRIGHT", editor, "BOTTOMRIGHT", -10, 10)
   editor.scroll:SetWidth(560)
-  editor.scroll:SetHeight(400)
+  editor.scroll:SetHeight(350)
 
   editor.scroll.backdrop = CreateFrame("Frame", "ShaguWidgetEditorScrollBackdrop", editor.scroll)
   editor.scroll.backdrop:SetFrameLevel(1)
@@ -481,7 +482,7 @@ do -- Edit Box
   editor.scroll.text.bg:SetTexture(.2,.2,.2,.2)
   editor.scroll.text:SetMultiLine(true)
   editor.scroll.text:SetWidth(560)
-  editor.scroll.text:SetHeight(400)
+  editor.scroll.text:SetHeight(350)
   editor.scroll.text:SetAllPoints(editor.scroll)
   editor.scroll.text:SetTextInsets(15,15,15,15)
   editor.scroll.text:SetFont(ShaguWidget.path .. "\\fonts\\RobotoMono.ttf", 10)
@@ -506,13 +507,14 @@ end
 do -- button: close
   editor.close = CreateFrame("Button", "ShaguWidgetEditorClose", editor)
   editor.close:SetPoint("TOPRIGHT", -5, -5)
-  editor.close:SetHeight(12)
-  editor.close:SetWidth(12)
+  editor.close:SetHeight(24)
+  editor.close:SetWidth(24)
   editor.close.texture = editor.close:CreateTexture()
   editor.close.texture:SetTexture(ShaguWidget.path .. "\\img\\close")
-  editor.close.texture:ClearAllPoints()
-  editor.close.texture:SetAllPoints(editor.close)
   editor.close.texture:SetVertexColor(1,.25,.25,1)
+  editor.close.texture:ClearAllPoints()
+  SetAllPointsOffset(editor.close.texture, editor.close, 5)
+
   editor.close:SetScript("OnClick", function()
    this:GetParent():Hide()
   end)
@@ -564,11 +566,11 @@ end
 do -- button: add
   editor.add = CreateFrame("Button", nil, editor, "UIPanelButtonTemplate")
   SkinButton(editor.add)
-  editor.add:SetWidth(75)
-  editor.add:SetHeight(22)
-  editor.add:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -35)
+  editor.add:SetWidth(85)
+  editor.add:SetHeight(26)
+  editor.add:SetPoint("TOPLEFT", editor, "TOPLEFT", 10, -39)
   editor.add:GetFontString():SetPoint("CENTER", 1, 0)
-  editor.add:SetText("[ + ] |cffccffcc New")
+  editor.add:SetText("Create")
   editor.add:SetTextColor(.5,1,.5,1)
   editor.add:SetScript("OnClick", function()
     local dialog = StaticPopupDialogs["SHAGUWIDGET_NEW"]
@@ -590,11 +592,11 @@ end
 do -- button: delete
   editor.del = CreateFrame("Button", nil, editor, "UIPanelButtonTemplate")
   SkinButton(editor.del)
-  editor.del:SetWidth(75)
-  editor.del:SetHeight(22)
+  editor.del:SetWidth(85)
+  editor.del:SetHeight(26)
   editor.del:SetPoint("LEFT", editor.add, "RIGHT", 5, 0)
   editor.del:GetFontString():SetPoint("CENTER", 1, 0)
-  editor.del:SetText("[ x ] |cffffcccc Remove")
+  editor.del:SetText("Delete")
   editor.del:SetTextColor(1,.5,.5,1)
   editor.del:SetScript("OnClick", function()
     local id, text = editor.input:GetSelection()
@@ -619,8 +621,8 @@ do -- dropdown: select
   editor.input = CreateDropDownButton(nil, editor)
   editor.input.menuframe:SetParent(editor)
   editor.input:SetPoint("LEFT", editor.del, "RIGHT", 5, 0)
-  editor.input:SetWidth(150)
-  editor.input:SetHeight(22)
+  editor.input:SetWidth(200)
+  editor.input:SetHeight(26)
   editor.input:SetMenu(function()
     local menu = {}
     if ShaguWidget_config then
@@ -644,9 +646,9 @@ do -- character visible
   editor.visible:SetPushedTexture("")
   editor.visible:SetHighlightTexture("")
   CreateBackdrop(editor.visible)
-  editor.visible:SetWidth(14)
-  editor.visible:SetHeight(14)
-  editor.visible:SetPoint("TOPRIGHT" , -10, -40)
+  editor.visible:SetWidth(24)
+  editor.visible:SetHeight(24)
+  editor.visible:SetPoint("TOPRIGHT" , -10, -41)
   editor.visible:SetScript("OnClick", function ()
     local id, text = editor.input:GetSelection()
     if text and this:GetChecked() then
