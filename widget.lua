@@ -39,6 +39,7 @@ end
 local function UpdateContent(self)
   local i = 0
   local width, height = 0, 0
+  local self = self or this
 
   -- check if widget was deleted
   if not ShaguWidget_config[self.id] then
