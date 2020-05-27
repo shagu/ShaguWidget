@@ -625,6 +625,7 @@ do -- dropdown: select
     local menu = {}
     if ShaguWidget_config then
       for name, config in pairs(ShaguWidget_config) do
+        local name = name
         table.insert(menu, {
           text = name,
           func = function()
