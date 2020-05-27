@@ -3,6 +3,7 @@ local CreateScrollFrame, CreateScrollChild
 local SkinButton, CreateDropDownButton, SkinArrowButton
 local MakeMovable = ShaguWidget.MakeMovable
 local CreateBackdrop = ShaguWidget.CreateBackdrop
+local _G = _G or getfenv(0)
 
 do -- pfUI API exports [https://github.com/shagu/pfUI/blob/master/api/ui-widgets.lua]
   do -- dropdown
