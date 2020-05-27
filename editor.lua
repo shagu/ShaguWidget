@@ -437,7 +437,7 @@ editor:SetScript("OnHide", function()
 end)
 
 editor.LoadConfig = function(self, name)
-  local config = ShaguWidget_config[name]
+  local config = ShaguWidget_config[name] or ""
 
   -- set window text
   self.scroll.text:SetText(config)
