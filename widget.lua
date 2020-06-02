@@ -42,7 +42,7 @@ local function UpdateContent(self)
   local self = self or this
 
   -- check if widget was deleted
-  if not ShaguWidget_config[self.id] then
+  if not ShaguWidget_config or not ShaguWidget_config[self.id] then
     self:Hide()
     return
   end
