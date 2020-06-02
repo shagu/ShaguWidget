@@ -9,7 +9,7 @@ gold: {color ffffff}{gold}{color}g {color ffffff}{silver}{color cccccc}s {color 
 {color}
 upload: {color ffffff}{up}kb/s
 download: {color ffffff}{down}kb/s
-mem: {color ffffff}{mem}
+mem: {color ffffff}{mem} MB
 ping: {color ffffff}{ping}ms
 fps: {color ffffff}{fps}
 ]],
