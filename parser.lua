@@ -9,98 +9,104 @@ local function round(input, places)
   end
 end
 
-local ParseConfig = function(input)
-  if string.find(input, "{date") then
-    local _, _, format = string.find(input, "{date (.-)}")
-    if format then
-      return date(format)
-    else
-      return date()
-    end
-  elseif string.find(input, "{name") then
-    local _, _, format = string.find(input, "{name (.-)}")
-    if format then
-      return UnitName(format) or ""
-    else
-      return UnitName("player") or ""
-    end
-  elseif string.find(input, "{level") then
-    local _, _, format = string.find(input, "{level (.-)}")
-    if format then
-      return UnitLevel(format) or ""
-    else
-      return UnitLevel("player") or ""
-    end
-  elseif string.find(input, "{health") then
-    local _, _, format = string.find(input, "{health (.-)}")
-    if format then
-      return UnitHealth(format) or ""
-    else
-      return UnitHealth("player") or ""
-    end
-  elseif string.find(input, "{maxhealth") then
-    local _, _, format = string.find(input, "{maxhealth (.-)}")
-    if format then
-      return UnitHealthMax(format) or ""
-    else
-      return UnitHealthMax("player") or ""
-    end
-  elseif string.find(input, "{mana") then
-    local _, _, format = string.find(input, "{mana (.-)}")
-    if format then
-      return UnitMana(format) or ""
-    else
-      return UnitMana("player") or ""
-    end
-  elseif string.find(input, "{maxmana") then
-    local _, _, format = string.find(input, "{maxmana (.-)}")
-    if format then
-      return UnitManaMax(format) or ""
-    else
-      return UnitManaMax("player") or ""
-    end
-  elseif string.find(input, "{gold}") then
+local caches = {}
+local updater = CreateFrame("Frame", "ShaguWidgetUpdater", WorldFrame)
+updater:SetScript("OnUpdate", function()
+  -- invalidate all caches each .2 seconds
+  if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .2 end
+  for capture in pairs(caches) do caches[capture] = nil end
+end)
+
+local captures = {
+  ["{color(.-)}"] = { "TIMER", function(params)
+    return string.len(params) > 0 and "|cff" .. params or "|r"
+  end },
+  ["{date(.-)}"] = { "TIMER", function(params)
+    return date((string.len(params) > 0 and params)) or ""
+  end },
+  ["{name(.-)}"] = { "TIMER", function(params)
+    return UnitName((string.len(params) > 0 and params or "player")) or ""
+  end },
+  ["{level(.-)}"] = { "TIMER", function(params)
+    return UnitLevel((string.len(params) > 0 and params or "player")) or ""
+  end },
+  ["{health(.-)}"] = { "TIMER", function(params)
+    return UnitHealth((string.len(params) > 0 and params or "player")) or ""
+  end },
+  ["{maxhealth(.-)}"] = { "TIMER", function(params)
+    return UnitHealthMax((string.len(params) > 0 and params or "player")) or ""
+  end },
+  ["{mana(.-)}"] = { "TIMER", function(params)
+    return UnitMana((string.len(params) > 0 and params or "player")) or ""
+  end },
+  ["{maxmana(.-)}"] = { "TIMER", function(params)
+    return UnitManaMax((string.len(params) > 0 and params or "player")) or ""
+  end },
+  ["{gold(.-)}"] = { "TIMER", function(params)
     return floor(GetMoney()/ 100 / 100)
-  elseif string.find(input, "{silver}") then
+  end },
+  ["{silver(.-)}"] = { "TIMER", function(params)
     return floor(mod((GetMoney()/100),100))
-  elseif string.find(input, "{copper}") then
+  end },
+  ["{copper(.-)}"] = { "TIMER", function(params)
     return floor(mod(GetMoney(),100))
-  elseif string.find(input, "{realm}") then
+  end },
+  ["{realm(.-)}"] = { "TIMER", function(params)
     return GetRealmName()
-  elseif string.find(input, "{fps}") then
+  end },
+  ["{fps(.-)}"] = { "TIMER", function(params)
     return ceil(GetFramerate())
-  elseif string.find(input, "{ping}") then
+  end },
+  ["{ping(.-)}"] = { "TIMER", function(params)
     local _, _, ping = GetNetStats()
     return ping
-  elseif string.find(input, "{up}") then
+  end },
+  ["{up}"] = { "TIMER", function(params)
     local _, up, _ = GetNetStats()
     return round(up,2)
-  elseif string.find(input, "{down}") then
+  end },
+  ["{down}"] = { "TIMER", function(params)
     local down, _, _ = GetNetStats()
     return round(down,2)
-  elseif string.find(input, "{mem}") then
+  end },
+  ["{mem}"] = { "TIMER", function(params)
     local memkb, gckb = gcinfo()
-    local memmb = memkb and memkb > 0 and round((memkb or 0)/1000, 2) .. " MB" or UNAVAILABLE
+    local memmb = memkb and memkb > 0 and round((memkb or 0)/1000, 2) or UNAVAILABLE
     return memmb
-  elseif string.find(input, "{memkb}") then
+  end },
+  ["{memkb}"] = { "TIMER", function(params)
     local memkb, gckb = gcinfo()
     return memkb
-  elseif string.find(input, "{serverh}") then
+  end },
+  ["{serverh}"] = { "TIMER", function(params)
     local h, _ = GetGameTime()
     return string.format("%.2d", h)
-  elseif string.find(input, "{serverm}") then
+  end },
+  ["{serverm}"] = { "TIMER", function(params)
     local _, m = GetGameTime()
     return string.format("%.2d", m)
-  elseif string.find(input, "{color") then
-    local _, _, color = string.find(input, "{color (.-)}")
-    if color then
-      return "|cff" .. color
-    else
-      return "|r"
+  end },
+}
+
+local exists, params, _
+local ParseConfig = function(input)
+  -- use cache where available
+  if caches[input] then return caches[input] end
+
+  -- scan for known captures and replace
+  for capture, data in pairs(captures) do
+    exists, _, params = string.find(input, capture)
+
+    if exists then -- capture found
+      params = params and string.gsub(params, "%s+", "") or ""
+      caches[input] = data[2](params)
+      return caches[input]
     end
-  else
-    return input
   end
+
+  -- return and skip unknown captures next round
+  caches[input] = input
+  return caches[input]
 end
 
 -- add to core
