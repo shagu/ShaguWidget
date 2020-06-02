@@ -146,7 +146,7 @@ local function CreateWidget(self, id, config)
 
   widget:SetScript("OnClick", ShaguWidget.ShowEditor)
   widget:SetScript("OnUpdate", UpdateContent)
-  widget:SetPoint("CENTER", 0, 0)
+  widget:SetPoint("RIGHT", -100, 0)
   widget:SetWidth(200)
   widget:SetHeight(200)
 
