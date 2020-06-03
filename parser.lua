@@ -9,7 +9,7 @@ local function round(input, places)
   end
 end
 
-local varcache, flaggedcache = {}, {}
+local varcache = {}
 local updater = CreateFrame("Frame", "ShaguWidgetUpdater", WorldFrame)
 updater:SetScript("OnUpdate", function()
   -- invalidate all varcache each .2 seconds
@@ -17,15 +17,7 @@ updater:SetScript("OnUpdate", function()
 
   for capture, data in pairs(varcache) do
     if strfind(data[1], "TIMER") then
-
-      if varcache[capture][2] then
-        varcache[capture][2] = nil
-        flaggedcache[capture] = nil
-      elseif not flaggedcache[capture] then
-        flaggedcache[capture] = true
-      else
-        varcache[capture] = nil
-      end
+      varcache[capture] = nil
     end
   end
 end)
