@@ -32,28 +32,28 @@ end)
 
 local captures = {
   ["{color(.-)}"] = { "TIMER", function(params)
-    return string.len(params) > 0 and "|cff" .. params or "|r"
+    return params and "|cff" .. params or "|r"
   end },
   ["{date(.-)}"] = { "TIMER", function(params)
-    return date((string.len(params) > 0 and params)) or ""
+    return date(params) or ""
   end },
   ["{name(.-)}"] = { "TIMER", function(params)
-    return UnitName((string.len(params) > 0 and params or "player")) or ""
+    return UnitName((params or "player")) or ""
   end },
   ["{level(.-)}"] = { "TIMER", function(params)
-    return UnitLevel((string.len(params) > 0 and params or "player")) or ""
+    return UnitLevel((params or "player")) or ""
   end },
   ["{health(.-)}"] = { "TIMER", function(params)
-    return UnitHealth((string.len(params) > 0 and params or "player")) or ""
+    return UnitHealth((params or "player")) or ""
   end },
   ["{maxhealth(.-)}"] = { "TIMER", function(params)
-    return UnitHealthMax((string.len(params) > 0 and params or "player")) or ""
+    return UnitHealthMax((params or "player")) or ""
   end },
   ["{mana(.-)}"] = { "TIMER", function(params)
-    return UnitMana((string.len(params) > 0 and params or "player")) or ""
+    return UnitMana((params or "player")) or ""
   end },
   ["{maxmana(.-)}"] = { "TIMER", function(params)
-    return UnitManaMax((string.len(params) > 0 and params or "player")) or ""
+    return UnitManaMax((params or "player")) or ""
   end },
   ["{gold(.-)}"] = { "TIMER", function(params)
     return floor(GetMoney()/ 100 / 100)
@@ -114,6 +114,8 @@ local ParseConfig = function(input)
 
     if exists then -- capture found
       params = params and string.gsub(params, "%s+", "") or ""
+      params = params and string.len(params) > 0 and params or nil
+
       varcache[input] = varcache[input] or {}
       varcache[input][1] = data[1]
       varcache[input][2] = data[2](params)
