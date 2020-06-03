@@ -9,12 +9,25 @@ local function round(input, places)
   end
 end
 
-local varcache = {}
+local varcache, flaggedcache = {}, {}
 local updater = CreateFrame("Frame", "ShaguWidgetUpdater", WorldFrame)
 updater:SetScript("OnUpdate", function()
   -- invalidate all varcache each .2 seconds
-  if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .2 end
-  for capture in pairs(varcache) do varcache[capture] = nil end
+  if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .1 end
+
+  for capture, data in pairs(varcache) do
+    if strfind(data[1], "TIMER") then
+
+      if varcache[capture][2] then
+        varcache[capture][2] = nil
+        flaggedcache[capture] = nil
+      elseif not flaggedcache[capture] then
+        flaggedcache[capture] = true
+      else
+        varcache[capture] = nil
+      end
+    end
+  end
 end)
 
 local captures = {
@@ -91,7 +104,9 @@ local captures = {
 local exists, params, _
 local ParseConfig = function(input)
   -- use cache where available
-  if varcache[input] then return varcache[input] end
+  if varcache[input] and varcache[input][2] then
+    return varcache[input][2]
+  end
 
   -- scan for known captures and replace
   for capture, data in pairs(captures) do
@@ -99,14 +114,18 @@ local ParseConfig = function(input)
 
     if exists then -- capture found
       params = params and string.gsub(params, "%s+", "") or ""
-      varcache[input] = data[2](params)
-      return varcache[input]
+      varcache[input] = varcache[input] or {}
+      varcache[input][1] = data[1]
+      varcache[input][2] = data[2](params)
+
+      return varcache[input][2]
     end
   end
 
   -- return and skip unknown captures next round
-  varcache[input] = input
-  return varcache[input]
+  varcache[input][1] = "NEVER"
+  varcache[input][2] = input
+  return varcache[input][2]
 end
 
 -- add to core
