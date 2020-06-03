@@ -9,12 +9,12 @@ local function round(input, places)
   end
 end
 
-local caches = {}
+local varcache = {}
 local updater = CreateFrame("Frame", "ShaguWidgetUpdater", WorldFrame)
 updater:SetScript("OnUpdate", function()
-  -- invalidate all caches each .2 seconds
+  -- invalidate all varcache each .2 seconds
   if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .2 end
-  for capture in pairs(caches) do caches[capture] = nil end
+  for capture in pairs(varcache) do varcache[capture] = nil end
 end)
 
 local captures = {
@@ -91,7 +91,7 @@ local captures = {
 local exists, params, _
 local ParseConfig = function(input)
   -- use cache where available
-  if caches[input] then return caches[input] end
+  if varcache[input] then return varcache[input] end
 
   -- scan for known captures and replace
   for capture, data in pairs(captures) do
@@ -99,14 +99,14 @@ local ParseConfig = function(input)
 
     if exists then -- capture found
       params = params and string.gsub(params, "%s+", "") or ""
-      caches[input] = data[2](params)
-      return caches[input]
+      varcache[input] = data[2](params)
+      return varcache[input]
     end
   end
 
   -- return and skip unknown captures next round
-  caches[input] = input
-  return caches[input]
+  varcache[input] = input
+  return varcache[input]
 end
 
 -- add to core
