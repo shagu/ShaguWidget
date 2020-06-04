@@ -20,14 +20,15 @@ end
 local varcache, elements, fired, events = {}, {}, {}, { ["NONE"] = true, ["TIMER"] = true }
 local updater = CreateFrame("Frame", "ShaguWidgetUpdater", WorldFrame)
 updater:SetScript("OnUpdate", function()
-  -- invalidate all varcache each .2 seconds
-  if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .2 end
+  if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .1 end
 
-  -- handle timers
-  for capture, data in pairs(varcache) do
-    if strfind(data[1], "TIMER:") or strfind(data[1], "TIMER$") then
-      varcache[capture] = nil
-    end
+  -- update clock timers each .1 second
+  fired["CLOCK"] = true
+
+  -- update timers each .5 second
+  if ( this.timer or 1) < GetTime() then
+    this.timer = GetTime() + .5
+    fired["TIMER"] = true
   end
 
   -- handle events
@@ -50,7 +51,7 @@ local captures = {
   ["{color(.-)}"] = { "NONE", function(params)
     return params and "|cff" .. params or "|r"
   end },
-  ["{date(.-)}"] = { "TIMER", function(params)
+  ["{date(.-)}"] = { "CLOCK", function(params)
     return date(params) or ""
   end },
   ["{name(.-)}"] = { "TIMER", function(params)
