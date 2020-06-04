@@ -1,5 +1,13 @@
 local gfind = string.gmatch or string.gfind
 
+local function strsplit(delimiter, subject)
+  if not subject then return nil end
+  local delimiter, fields = delimiter or ":", {}
+  local pattern = string.format("([^%s]+)", delimiter)
+  string.gsub(subject, pattern, function(c) fields[table.getn(fields)+1] = c end)
+  return unpack(fields)
+end
+
 local function round(input, places)
   if not places then places = 0 end
   if type(input) == "number" and type(places) == "number" then
@@ -9,21 +17,29 @@ local function round(input, places)
   end
 end
 
-local varcache = {}
+local varcache, elements, events = {}, {}, { ["NONE"] = true, ["TIMER"] = true }
 local updater = CreateFrame("Frame", "ShaguWidgetUpdater", WorldFrame)
 updater:SetScript("OnUpdate", function()
   -- invalidate all varcache each .2 seconds
-  if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .1 end
+  if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .2 end
 
   for capture, data in pairs(varcache) do
-    if strfind(data[1], "TIMER") then
+    if strfind(data[1], "TIMER:") or strfind(data[1], "TIMER$") then
+      varcache[capture] = nil
+    end
+  end
+end)
+
+updater:SetScript("OnEvent", function()
+  for capture, data in pairs(varcache) do
+    if strfind(data[1], event..":") or strfind(data[1], event.."$") then
       varcache[capture] = nil
     end
   end
 end)
 
 local captures = {
-  ["{color(.-)}"] = { "TIMER", function(params)
+  ["{color(.-)}"] = { "NONE", function(params)
     return params and "|cff" .. params or "|r"
   end },
   ["{date(.-)}"] = { "TIMER", function(params)
@@ -32,31 +48,31 @@ local captures = {
   ["{name(.-)}"] = { "TIMER", function(params)
     return UnitName((params or "player")) or ""
   end },
-  ["{level(.-)}"] = { "TIMER", function(params)
+  ["{level(.-)}"] = { "UNIT_LEVEL", function(params)
     return UnitLevel((params or "player")) or ""
   end },
-  ["{health(.-)}"] = { "TIMER", function(params)
+  ["{health(.-)}"] = { "UNIT_HEALTH", function(params)
     return UnitHealth((params or "player")) or ""
   end },
-  ["{maxhealth(.-)}"] = { "TIMER", function(params)
+  ["{maxhealth(.-)}"] = { "UNIT_HEALTH", function(params)
     return UnitHealthMax((params or "player")) or ""
   end },
-  ["{mana(.-)}"] = { "TIMER", function(params)
+  ["{mana(.-)}"] = { "UNIT_MANA", function(params)
     return UnitMana((params or "player")) or ""
   end },
-  ["{maxmana(.-)}"] = { "TIMER", function(params)
+  ["{maxmana(.-)}"] = { "UNIT_MANA", function(params)
     return UnitManaMax((params or "player")) or ""
   end },
-  ["{gold(.-)}"] = { "TIMER", function(params)
+  ["{gold(.-)}"] = { "PLAYER_MONEY", function(params)
     return floor(GetMoney()/ 100 / 100)
   end },
-  ["{silver(.-)}"] = { "TIMER", function(params)
+  ["{silver(.-)}"] = { "PLAYER_MONEY", function(params)
     return floor(mod((GetMoney()/100),100))
   end },
-  ["{copper(.-)}"] = { "TIMER", function(params)
+  ["{copper(.-)}"] = { "PLAYER_MONEY", function(params)
     return floor(mod(GetMoney(),100))
   end },
-  ["{realm(.-)}"] = { "TIMER", function(params)
+  ["{realm(.-)}"] = { "PLAYER_ENTERING_WORLD", function(params)
     return GetRealmName()
   end },
   ["{fps(.-)}"] = { "TIMER", function(params)
@@ -108,9 +124,21 @@ local ParseConfig = function(input)
       params = params and string.gsub(params, "%s+", "") or ""
       params = params and string.len(params) > 0 and params or nil
 
+      -- cache received input and its events
       varcache[input] = varcache[input] or {}
       varcache[input][1] = data[1]
       varcache[input][2] = data[2](params)
+
+      -- register new element and enable its events
+      if not elements[capture] then
+        elements[capture] = true
+        for i, event in pairs({ strsplit(":", data[1]) }) do
+          if event and not events[event] then
+            events[event] = true
+            updater:RegisterEvent(event)
+          end
+        end
+      end
 
       return varcache[input][2]
     end
