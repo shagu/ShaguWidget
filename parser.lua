@@ -17,25 +17,33 @@ local function round(input, places)
   end
 end
 
-local varcache, elements, events = {}, {}, { ["NONE"] = true, ["TIMER"] = true }
+local varcache, elements, fired, events = {}, {}, {}, { ["NONE"] = true, ["TIMER"] = true }
 local updater = CreateFrame("Frame", "ShaguWidgetUpdater", WorldFrame)
 updater:SetScript("OnUpdate", function()
   -- invalidate all varcache each .2 seconds
   if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .2 end
 
+  -- handle timers
   for capture, data in pairs(varcache) do
     if strfind(data[1], "TIMER:") or strfind(data[1], "TIMER$") then
       varcache[capture] = nil
     end
   end
+
+  -- handle events
+  for event in pairs(fired) do
+    for capture, data in pairs(varcache) do
+      if strfind(data[1], event..":") or strfind(data[1], event.."$") then
+        varcache[capture] = nil
+      end
+    end
+
+    fired[event] = nil
+  end
 end)
 
 updater:SetScript("OnEvent", function()
-  for capture, data in pairs(varcache) do
-    if strfind(data[1], event..":") or strfind(data[1], event.."$") then
-      varcache[capture] = nil
-    end
-  end
+  fired[event] = true
 end)
 
 local captures = {
