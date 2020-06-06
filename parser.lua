@@ -130,7 +130,7 @@ local ParseConfig = function(input)
     exists, _, params = string.find(input, capture)
 
     if exists then -- capture found
-      params = params and string.gsub(params, "%s+", "") or ""
+      params = params and string.gsub(params, "^%s*(.-)%s*$", "%1")
       params = params and string.len(params) > 0 and params or nil
 
       -- cache received input and its events
