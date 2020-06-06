@@ -5,7 +5,7 @@ local function strsplit(delimiter, subject)
   local delimiter, fields = delimiter or ":", {}
   local pattern = string.format("([^%s]+)", delimiter)
   string.gsub(subject, pattern, function(c) fields[table.getn(fields)+1] = c end)
-  return unpack(fields)
+  return fields
 end
 
 local function round(input, places)
@@ -141,7 +141,7 @@ local ParseConfig = function(input)
       -- register new element and enable its events
       if not elements[capture] then
         elements[capture] = true
-        for i, event in pairs({ strsplit(":", data[1]) }) do
+        for i, event in pairs(strsplit(":", data[1])) do
           if event and not events[event] then
             events[event] = true
             updater:RegisterEvent(event)
