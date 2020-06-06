@@ -91,28 +91,28 @@ local captures = {
     local _, _, ping = GetNetStats()
     return ping
   end },
-  ["{up}"] = { "TIMER", function(params)
+  ["{up(.-)}"] = { "TIMER", function(params)
     local _, up, _ = GetNetStats()
     return round(up,2)
   end },
-  ["{down}"] = { "TIMER", function(params)
+  ["{down(.-)}"] = { "TIMER", function(params)
     local down, _, _ = GetNetStats()
     return round(down,2)
   end },
-  ["{mem}"] = { "TIMER", function(params)
+  ["{mem(.-)}"] = { "TIMER", function(params)
     local memkb, gckb = gcinfo()
     local memmb = memkb and memkb > 0 and round((memkb or 0)/1000, 2) or UNAVAILABLE
     return memmb
   end },
-  ["{memkb}"] = { "TIMER", function(params)
+  ["{memkb(.-)}"] = { "TIMER", function(params)
     local memkb, gckb = gcinfo()
     return memkb
   end },
-  ["{serverh}"] = { "TIMER", function(params)
+  ["{serverh(.-)}"] = { "TIMER", function(params)
     local h, _ = GetGameTime()
     return string.format("%.2d", h)
   end },
-  ["{serverm}"] = { "TIMER", function(params)
+  ["{serverm(.-)}"] = { "TIMER", function(params)
     local _, m = GetGameTime()
     return string.format("%.2d", m)
   end },
