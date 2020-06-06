@@ -116,6 +116,25 @@ local captures = {
     local _, m = GetGameTime()
     return string.format("%.2d", m)
   end },
+  ["{itemcount(.-)}"] = { "BAG_UPDATE", function(params)
+    local icount, ilink, item, match, _
+    local count = 0
+    for bag = 4, 0, -1 do
+      for slot = 1, GetContainerNumSlots(bag) do
+        _, icount = GetContainerItemInfo(bag, slot)
+        if icount then
+          ilink = GetContainerItemLink(bag,slot)
+          _, _, item = strfind(ilink, "(%d+):")
+          match = GetItemInfo(item)
+          if match and match ~= "" and match == params then
+            count = count + icount
+          end
+        end
+      end
+    end
+
+    return count
+  end },
 }
 
 local exists, params, _

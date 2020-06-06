@@ -56,7 +56,9 @@ YouTube Video on the initial prototype: [HERE](https://www.youtube.com/watch?v=6
 
 * **{serverh}** - Displays the servertime clock (hour).
 
-* **{serverm}** - Displays the servertime clock (minutes)
+* **{serverm}** - Displays the servertime clock (minutes).
+
+* **{itemcount NAME}** - Displays how many of the given items are carried in the inventory.
 
 ## Fonts
 ### Builtin Fonts
