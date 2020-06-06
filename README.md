@@ -1,5 +1,9 @@
 # ShaguWidget
-**not ready yet.**
+<a href="screenshot2.jpg"><img style="float:right; width: 200px; padding: 10px;" src=screenshot2.jpg></a>
+
+ShaguWidget is an addon for the original World of Warcraft: Vanilla (1.12.1) and The Burning Crusade (2.4.3) gameclients. It is highly configurable and is able to monitor several game variables including the memory, upload, download, server time, unit names, levels, health, mana, money and much more. ShaguWidget is drawn directly to the World Frame, allowing it to stays visible even when the UI is fade out.
+
+The addon supports adding multiple widgets. Each widget can be scripted and customized via the built-in widget editor using plain text and several variables. Every widget can be toggled for each character. In order to move a widget, the editor has to be opened.
 
 ## Commands
 
