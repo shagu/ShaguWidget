@@ -54,22 +54,22 @@ local captures = {
   ["{date(.-)}"] = { "CLOCK", function(params)
     return date(params) or ""
   end },
-  ["{name(.-)}"] = { "TIMER", function(params)
+  ["{name(.-)}"] = { "TIMER:PLAYER_TARGET_CHANGED", function(params)
     return UnitName((params or "player")) or ""
   end },
-  ["{level(.-)}"] = { "UNIT_LEVEL", function(params)
+  ["{level(.-)}"] = { "UNIT_LEVEL:PLAYER_TARGET_CHANGED", function(params)
     return UnitLevel((params or "player")) or ""
   end },
-  ["{health(.-)}"] = { "UNIT_HEALTH", function(params)
+  ["{health(.-)}"] = { "UNIT_HEALTH:PLAYER_TARGET_CHANGED", function(params)
     return UnitHealth((params or "player")) or ""
   end },
-  ["{maxhealth(.-)}"] = { "UNIT_HEALTH", function(params)
+  ["{maxhealth(.-)}"] = { "UNIT_HEALTH:PLAYER_TARGET_CHANGED", function(params)
     return UnitHealthMax((params or "player")) or ""
   end },
-  ["{mana(.-)}"] = { "UNIT_MANA", function(params)
+  ["{mana(.-)}"] = { "UNIT_MANA:PLAYER_TARGET_CHANGED", function(params)
     return UnitMana((params or "player")) or ""
   end },
-  ["{maxmana(.-)}"] = { "UNIT_MANA", function(params)
+  ["{maxmana(.-)}"] = { "UNIT_MANA:PLAYER_TARGET_CHANGED", function(params)
     return UnitManaMax((params or "player")) or ""
   end },
   ["{gold(.-)}"] = { "PLAYER_MONEY", function(params)
