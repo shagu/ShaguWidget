@@ -72,6 +72,17 @@ local captures = {
   ["{maxmana(.-)}"] = { "UNIT_MANA:PLAYER_TARGET_CHANGED", function(params)
     return UnitManaMax((params or "player")) or ""
   end },
+  ["{armor(.-)}"] = { "TIMER:PLAYER_TARGET_CHANGED", function(params)
+    return UnitArmor((params or "player")) or ""
+  end },
+  ["{mindmg(.-)}"] = { "TIMER:PLAYER_TARGET_CHANGED", function(params)
+    local mindmg, maxdmg = UnitDamage((params or "player"))
+    return string.format("%.0f", mindmg) or 0
+  end },
+  ["{maxdmg(.-)}"] = { "TIMER:PLAYER_TARGET_CHANGED", function(params)
+    local mindmg, maxdmg = UnitDamage((params or "player"))
+    return string.format("%.0f", maxdmg) or 0
+  end },
   ["{gold(.-)}"] = { "PLAYER_MONEY", function(params)
     return floor(GetMoney()/ 100 / 100)
   end },
