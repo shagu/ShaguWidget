@@ -60,6 +60,30 @@ local captures = {
   ["{level(.-)}"] = { "UNIT_LEVEL:PLAYER_TARGET_CHANGED", function(params)
     return UnitLevel((params or "player")) or ""
   end },
+  ["{elite(.-)}"] = { "TIMER:PLAYER_TARGET_CHANGED", function(params, args)
+    local target, defstrings = "player", "_,+,R+,B,R"
+    local strings
+
+    if params then
+      local split = strsplit(" ", params)
+      target = split[1] or target
+      strings = strsplit(",", (split[2] or defstrings))
+    end
+
+    local elite = UnitClassification(target)
+
+    if elite == "elite" then
+      return strings[2] == "_" and "" or strings[2]
+    elseif elite == "rareelite" then
+      return strings[3] == "_" and "" or strings[3]
+    elseif elite == "worldboss" then
+      return strings[4] == "_" and "" or strings[4]
+    elseif elite == "rare" then
+      return strings[5] == "_" and "" or strings[5]
+    else
+      return strings[1] == "_" and "" or strings[1]
+    end
+  end },
   ["{health(.-)}"] = { "UNIT_HEALTH:PLAYER_TARGET_CHANGED", function(params)
     return UnitHealth((params or "player")) or ""
   end },

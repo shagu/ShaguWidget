@@ -30,6 +30,8 @@ YouTube Video on the initial prototype: [HERE](https://www.youtube.com/watch?v=6
 
 * **{level UNIT}** - Displays the level of the given unit. Defaults to own character level. For details, see [WoWWiki](https://wowwiki.fandom.com/wiki/UnitId))
 
+* **{elite UNIT STRING}** - Displays the elite state of the given unit. Defaults to own character level. For details, see [WoWWiki](https://wowwiki.fandom.com/wiki/UnitId)). The string parameter is a comma-separated list of strings that should be printed for each elite type. Defaults to: `_,+,R+,B,R` where `_` is shown as nothing.
+
 * **{health UNIT}** - Displays the health of the given unit. Defaults to own character health. For details, see [WoWWiki](https://wowwiki.fandom.com/wiki/UnitId))
 
 * **{maxhealth UNIT}** - Displays the maximum health of the given unit. Defaults to own character max health. For details, see [WoWWiki](https://wowwiki.fandom.com/wiki/UnitId))
