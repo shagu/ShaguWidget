@@ -184,9 +184,11 @@ local ParseConfig = function(input)
   end
 
   -- return and skip unknown captures next round
-  varcache[input][1] = "NEVER"
-  varcache[input][2] = input
-  return varcache[input][2]
+  if varcache[input] then
+    varcache[input][1] = "NEVER"
+    varcache[input][2] = input
+    return varcache[input][2]
+  end
 end
 
 -- add to core
