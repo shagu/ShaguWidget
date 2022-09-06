@@ -4,7 +4,7 @@ local function strsplit(delimiter, subject)
   if not subject then return nil end
   local delimiter, fields = delimiter or ":", {}
   local pattern = string.format("([^%s]+)", delimiter)
-  string.gsub(subject, pattern, function(c) fields[table.getn(fields)+1] = c end)
+  string.gsub(subject, pattern, function(c) fields[table.getn(fields) + 1] = c end)
   return fields
 end
 
@@ -20,13 +20,13 @@ end
 local varcache, elements, fired, events = {}, {}, {}, { ["NONE"] = true, ["TIMER"] = true }
 local updater = CreateFrame("Frame", "ShaguWidgetUpdater", WorldFrame)
 updater:SetScript("OnUpdate", function()
-  if ( this.tick or 1) > GetTime() then return else this.tick = GetTime() + .1 end
+  if (this.tick or 1) > GetTime() then return else this.tick = GetTime() + .1 end
 
   -- update clock timers each .1 second
   fired["CLOCK"] = true
 
   -- update timers each .5 second
-  if ( this.timer or 1) < GetTime() then
+  if (this.timer or 1) < GetTime() then
     this.timer = GetTime() + .5
     fired["TIMER"] = true
   end
@@ -34,7 +34,7 @@ updater:SetScript("OnUpdate", function()
   -- handle events
   for event in pairs(fired) do
     for capture, data in pairs(varcache) do
-      if strfind(data[1], event..":") or strfind(data[1], event.."$") then
+      if strfind(data[1], event .. ":") or strfind(data[1], event .. "$") then
         varcache[capture] = nil
       end
     end
@@ -108,13 +108,13 @@ local captures = {
     return string.format("%.0f", maxdmg) or 0
   end },
   ["{gold(.-)}"] = { "PLAYER_MONEY", function(params)
-    return floor(GetMoney()/ 100 / 100)
+    return floor(GetMoney() / 100 / 100)
   end },
   ["{silver(.-)}"] = { "PLAYER_MONEY", function(params)
-    return floor(mod((GetMoney()/100),100))
+    return floor(mod((GetMoney() / 100), 100))
   end },
   ["{copper(.-)}"] = { "PLAYER_MONEY", function(params)
-    return floor(mod(GetMoney(),100))
+    return floor(mod(GetMoney(), 100))
   end },
   ["{realm(.-)}"] = { "PLAYER_ENTERING_WORLD", function(params)
     return GetRealmName()
@@ -128,15 +128,15 @@ local captures = {
   end },
   ["{up(.-)}"] = { "TIMER", function(params)
     local _, up, _ = GetNetStats()
-    return round(up,2)
+    return round(up, 2)
   end },
   ["{down(.-)}"] = { "TIMER", function(params)
     local down, _, _ = GetNetStats()
-    return round(down,2)
+    return round(down, 2)
   end },
   ["{mem(.-)}"] = { "TIMER", function(params)
     local memkb, gckb = gcinfo()
-    local memmb = memkb and memkb > 0 and round((memkb or 0)/1000, 2) or UNAVAILABLE
+    local memmb = memkb and memkb > 0 and round((memkb or 0) / 1000, 2) or UNAVAILABLE
     return memmb
   end },
   ["{memkb(.-)}"] = { "TIMER", function(params)
@@ -158,7 +158,7 @@ local captures = {
       for slot = 1, GetContainerNumSlots(bag) do
         _, icount = GetContainerItemInfo(bag, slot)
         if icount then
-          ilink = GetContainerItemLink(bag,slot)
+          ilink = GetContainerItemLink(bag, slot)
           _, _, item = strfind(ilink, "(%d+):")
           match = GetItemInfo(item)
           if match and match ~= "" and match == params then
@@ -169,6 +169,14 @@ local captures = {
     end
 
     return count
+  end },
+  ["{zone(.-)}"] = { "ZONE_CHANGED", function(params)
+    local zoneName = GetRealZoneText()
+    return zoneName
+  end },
+  ["{subzone(.-)}"] = { "ZONE_CHANGED", function(params)
+    local subzone = GetSubZoneText()
+    return subzone
   end },
 }
 
