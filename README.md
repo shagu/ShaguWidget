@@ -66,6 +66,10 @@ YouTube Video on the initial prototype: [HERE](https://www.youtube.com/watch?v=6
 
 * **{itemcount NAME}** - Displays how many of the given items are carried in the inventory.
 
+* **{zone}** - Displays the real name of an instance or the zone name.
+
+* **{subzone}** - Displays the subzone name or an empty string (if not in a subzone).
+
 ## Fonts
 ### Builtin Fonts
 ShaguWidget already includes 14 fonts taken from the [google font project](https://fonts.google.com/):
