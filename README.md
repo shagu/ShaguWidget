@@ -17,6 +17,20 @@ To start the editor/unlock mode:
 ![screenshot](screenshot.jpg)
 YouTube Video on the initial prototype: [HERE](https://www.youtube.com/watch?v=6xT7l5_q-fY)
 
+## Installation (Vanilla, 1.12)
+1. Download **[Latest Version](https://github.com/shagu/ShaguWidget/archive/master.zip)**
+2. Unpack the Zip file
+3. Rename the folder "ShaguWidget-master" to "ShaguWidget"
+4. Copy "ShaguWidget" into Wow-Directory\Interface\AddOns
+5. Restart Wow
+
+## Installation (The Burning Crusade, 2.4.3)
+1. Download **[Latest Version](https://github.com/shagu/ShaguWidget/archive/master.zip)**
+2. Unpack the Zip file
+3. Rename the folder "ShaguWidget-master" to "ShaguWidget-tbc"
+4. Copy "ShaguWidget-tbc" into Wow-Directory\Interface\AddOns
+5. Restart Wow
+
 ## Variables
 * **{color COLOR}** - Set the color to following characters to the given hex color (RRGGBB) such as: "33ffcc". If empty, the color will be reset to game defaults.
 
