@@ -76,9 +76,24 @@ local function UpdateContent(self)
     self.highlight:SetAlpha(self.alpha)
   end
 
-  for line in gfind(ShaguWidget_config[self.id]..'\n', '(.-)\r?\n') do
+  -- limit updates to once per 0.25 seconds
+  if ( this.tick or .25) > GetTime() then return else this.tick = GetTime() + .25 end
+
+  -- cache the gfind iterator only once and reuse it after
+  if not self.text or self.text.raw ~= ShaguWidget_config[self.id] then
+    self.text = { raw = ShaguWidget_config[self.id], lines = {} }
+
+    local count = 0
+    for line in gfind(ShaguWidget_config[self.id]..'\n', '(.-)\r?\n') do
+      count = count + 1
+      self.text.lines[count] = line
+    end
+  end
+
+  for id, line in pairs(self.text.lines) do
     i = i + 1
 
+    -- generate required font strings per line
     local row = PrepareLine(self, i)
 
     -- update font size
